@@ -43,7 +43,7 @@ public class UserController {
 
 
     @GetMapping
-    public  ResponseEntity<Collection<UserDto>> findAll() {
+    public ResponseEntity<Collection<UserDto>> findAll() {
         return new ResponseEntity<>(userStorage.findAll().stream().map(UserMapper::toUserDto)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -53,7 +53,7 @@ public class UserController {
         if (id < 0) {
             throw new ValidationException("getUser: Введите положительный id.");
         }
-        if(!userStorage.findAll().stream().map(User::getId).collect(Collectors.toList()).contains(id)){
+        if (!userStorage.findAll().stream().map(User::getId).collect(Collectors.toList()).contains(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(UserMapper.toUserDto(userStorage.findUserById(id)), HttpStatus.OK);
@@ -70,10 +70,10 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id, @RequestBody Map<String, Object> fields) {
 
-        if (fields.containsKey("email")&&userStorage.findAll().stream().map(User::getEmail)
+        if (fields.containsKey("email") && userStorage.findAll().stream().map(User::getEmail)
                 .collect(Collectors.toList()).contains(fields.get("email"))) {
-            if(userStorage.findUserById(id).getEmail().equals(fields.get("email"))) {
-                return  getUser(id);
+            if (userStorage.findUserById(id).getEmail().equals(fields.get("email"))) {
+                return getUser(id);
             }
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

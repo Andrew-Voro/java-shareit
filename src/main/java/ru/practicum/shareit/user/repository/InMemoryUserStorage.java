@@ -42,7 +42,6 @@ public class InMemoryUserStorage implements UserRepository {
     }
 
 
-
     @Override
     public Collection<User> findAll() {
         return users.values();
@@ -57,8 +56,9 @@ public class InMemoryUserStorage implements UserRepository {
                     " отсутствует в базе. ");
         }
     }
+
     @Override
-    public Map<Long, User> getUsers(){
+    public Map<Long, User> getUsers() {
         return users;
     }
 
