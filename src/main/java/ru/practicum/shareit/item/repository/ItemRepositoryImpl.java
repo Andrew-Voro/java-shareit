@@ -25,7 +25,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Item getItem(Long itemId) {
         if (items.values().stream().flatMap(Collection::stream).map(Item::getId).collect(Collectors.toList()).contains(itemId)) {
-            return items.values().stream().flatMap(Collection::stream).filter(x -> x.getId() == itemId).collect(Collectors.toList()).get(0);
+            return items.values().stream().flatMap(Collection::stream).filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
         } else {
             throw new ObjectNotFoundException("getItem: предмета c id = " + itemId + " нет.");
         }
@@ -34,7 +34,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Item save(Item item) {
         item.setId(getId());
-        items.compute(item.getOwner(), (userId, userItems) -> { //
+        items.compute(item.getOwner(), (userId, userItems) -> {
             if (userItems == null) {
                 userItems = new ArrayList<>();
             }

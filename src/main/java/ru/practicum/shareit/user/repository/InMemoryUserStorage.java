@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -27,7 +28,7 @@ public class InMemoryUserStorage implements UserRepository {
     @Override
     public User create(User user) {
 
-        if (!users.containsValue(user.hashCode())) {
+        if (!users.values().stream().map(User::hashCode).collect(Collectors.toList()).contains(user.hashCode())) {//
             user.setId(++idCounter);
             users.put(user.getId(), user);
             log.debug("POST: Пользователь {} с электронной почтой {} зарегистрирован. ", user.getName(),

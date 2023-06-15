@@ -37,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId) {
 
 
-        Item item = repository.findByUserId(userId).stream().filter(x -> x.getId() == itemId).collect(Collectors.toList()).get(0);
+        Item item = repository.findByUserId(userId).stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
 
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Item.class, k);
