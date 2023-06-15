@@ -28,7 +28,7 @@ public class InMemoryUserStorage implements UserRepository {
     @Override
     public User create(User user) {
 
-        if (!users.values().stream().map(User::hashCode).collect(Collectors.toList()).contains(user.hashCode())) {//
+        if (!users.values().stream().map(User::hashCode).collect(Collectors.toList()).contains(user.hashCode())) {
             user.setId(++idCounter);
             users.put(user.getId(), user);
             log.debug("POST: Пользователь {} с электронной почтой {} зарегистрирован. ", user.getName(),

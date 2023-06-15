@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
-    private final  ItemRepository repository;
+    private final ItemRepository repository;
 
 
     @Override
