@@ -1,6 +1,8 @@
 package ru.practicum.shareit.request.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -8,9 +10,10 @@ import java.time.LocalDateTime;
  * TODO Sprint add-item-requests.
  */
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemRequest {
-    private Long id;
-    private String description;
-    private Long requestor;
-    private LocalDateTime created;
+    Long id;
+    String description;
+    Long requestor;
+    LocalDateTime created;
 }

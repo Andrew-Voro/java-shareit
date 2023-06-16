@@ -43,10 +43,11 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (itemId < 0) {
+            log.info("Значение itemId не может быть меньше нуля");
             throw new ValidationException("getItem: Введите положительный itemId.");
         }
 
-
+        log.info("Предмет с itemId:" + itemId + " запрошен.");
         return new ResponseEntity<>(ItemMapper.toItemDto(itemStorage.getItem(itemId)), HttpStatus.OK);
     }
 
@@ -56,17 +57,18 @@ public class ItemController {
                                        @RequestHeader("X-Sharer-User-Id") long userId,
                                        @RequestBody ItemDto item) {
         if (!headers.containsKey("x-sharer-user-id")) {
-            log.info("Нет заголовка: X-Sharer-User-Id.");
+            log.info("Метод add нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (!userStorage.findAll().stream().map(User::getId).collect(Collectors.toList()).contains(userId)) {
-            log.info("Нет пользователя с id " + userId + " .");
+            log.info("Метод add нет пользователя с id " + userId + " .");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (item.getName().isBlank()) {
             log.info("Поле name пусто.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        log.info("Предмет добавление.");
         return new ResponseEntity<>(itemService.addNewItem(userId, item), HttpStatus.OK);
     }
 
@@ -78,23 +80,24 @@ public class ItemController {
     ) {
 
         if (!headers.containsKey("x-sharer-user-id")) {
-            log.info("Нет заголовка: X-Sharer-User-Id.");
+            log.info("Метод updateItem нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (!userStorage.findAll().stream().map(User::getId).collect(Collectors.toList()).contains(userId)) {
-            log.info("Нет пользователя с id " + userId + " .");
+            log.info("Метод updateItem нет пользователя с id " + userId + " .");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (!itemService.getItems(userId).stream().map(ItemDto::getId).collect(Collectors.toList()).contains(itemId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-
+        log.info("Предмет с id: " + itemId + " обновление.");
         return new ResponseEntity<>(itemService.updateItem(fields, userId, itemId), HttpStatus.OK);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDto>> searchByNameOrDescription(@RequestParam(name = "text") String text) {
+        log.info("Поиск предмета по названию:" + text);
         return new ResponseEntity<>(itemService.searchByNameOrDescription(text), HttpStatus.OK);
     }
 }

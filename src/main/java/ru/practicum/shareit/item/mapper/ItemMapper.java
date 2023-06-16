@@ -1,13 +1,12 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item) {

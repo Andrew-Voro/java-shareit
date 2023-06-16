@@ -1,8 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 
@@ -11,14 +10,16 @@ import java.io.Serializable;
  */
 @Data
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class ItemDto implements Serializable {
-    private Long id;
+    Long id;
     @NonNull
-    private String name;
+    String name;
     @NonNull
-    private String description;
+    String description;
     @NonNull
-    private Boolean available;
-    private Long owner;
-    private Long request;
+    Boolean available;
+    Long owner;
+    Long request;
 }

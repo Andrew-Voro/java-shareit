@@ -32,18 +32,22 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> create(@Valid @RequestBody UserDto user) {
         if (userStorage.findAll().stream().map(User::getEmail).collect(Collectors.toList()).contains(user.getEmail())) {
+            log.info("Пользователь с почтой: " + user.getEmail() + " уже существует.");
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         if (user.getEmail().isBlank() || !(user.getEmail().contains("@"))) {
+            log.info("Некорректный почтовый адрес");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        log.info("Пользователь с почтой: " + user.getEmail() + " создан.");
         return new ResponseEntity<>(UserMapper.toUserDto(userStorage.create(UserMapper.toDtoUser(user))), HttpStatus.OK);
     }
 
 
     @GetMapping
     public ResponseEntity<Collection<UserDto>> findAll() {
+        log.info("Вернули список пользователей.");
         return new ResponseEntity<>(userStorage.findAll().stream().map(UserMapper::toUserDto)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -51,19 +55,24 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id) {
         if (id < 0) {
+            log.info("Введите положительный id.");
             throw new ValidationException("getUser: Введите положительный id.");
         }
         if (!userStorage.findAll().stream().map(User::getId).collect(Collectors.toList()).contains(id)) {
+            log.info("Пользователь с  id: " + id + " не найден.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        log.info("Пользователь с  id: " + id + " получен.");
         return new ResponseEntity<>(UserMapper.toUserDto(userStorage.findUserById(id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         if (id < 0) {
+            log.info("Введите положительный id.");
             throw new ValidationException("delete: Введите положительный id.");
         }
+        log.info("Пользователь с  id: " + id + " удален.");
         userStorage.delete(id);
     }
 
@@ -73,10 +82,13 @@ public class UserController {
         if (fields.containsKey("email") && userStorage.findAll().stream().map(User::getEmail)
                 .collect(Collectors.toList()).contains(fields.get("email"))) {
             if (userStorage.findUserById(id).getEmail().equals(fields.get("email"))) {
+                log.info("Изменения уже были внесены.");
                 return getUser(id);
             }
+            log.info("Несоответствие id и почты пользователя.");
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+        log.info("Данные пользователя с  id: " + id + " обновлены.");
         return userService.updateUser(fields, id);
     }
 
