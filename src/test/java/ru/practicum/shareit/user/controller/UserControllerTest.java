@@ -40,7 +40,7 @@ class UserControllerTest {
     public void updateUserTest() {
         Map<String, Object> fields = new HashMap<>();
         fields.put("name", "Марк Юрьевич");
-        long id = 1l;
+        long id = 1L;
         if (userController.getUser(id).getStatusCode().equals(HttpStatus.NOT_FOUND)) {
             UserDto user = UserDto.builder().email("user@user.com").name("Марк").build();
             userController.create(user).getBody();
@@ -48,7 +48,7 @@ class UserControllerTest {
 
         UserDto user3 = userController.updateUser(id, fields).getBody();
         assertEquals(user3.getName(), "Марк Юрьевич");
-        userController.delete(1l);
+        userController.delete(1L);
     }
 
     @Test
@@ -57,7 +57,7 @@ class UserControllerTest {
             UserDto user = UserDto.builder().email("user@user.com").name("Марк").build();
             userController.create(user).getBody();
         }
-        long id = 1l;
+        long id = 1L;
         if (userController.findAll().getBody().stream().map(UserDto::getId).collect(Collectors.toList()).contains(id)) {
             userController.delete(id);
             assertFalse(userController.findAll().getBody().stream().map(UserDto::getId)

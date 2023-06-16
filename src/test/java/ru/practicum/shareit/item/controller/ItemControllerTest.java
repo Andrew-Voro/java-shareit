@@ -31,7 +31,7 @@ class ItemControllerTest {
     public void createItemTest() {
         UserDto user = UserDto.builder().email("user@user.com").name("Марк").build();
         ItemDto item = ItemDto.builder().available(true).description("Отвертка аккумуляторная")
-                .name("Ответка").owner(1l).build();
+                .name("Ответка").owner(1L).build();
         Map<String, String> headers = new HashMap<>();
         headers.put("x-sharer-user-id", "1");
         UserDto user2 = userController.create(user).getBody();
@@ -47,8 +47,8 @@ class ItemControllerTest {
         fields.put("name", "Марк Юрьевич");
         Map<String, Object> fieldsItem = new HashMap<>();
         fieldsItem.put("name", "Отвертка плоская");
-        long id = 1l;
-        long itemId = 1l;
+        long id = 1L;
+        long itemId = 1L;
         Map<String, String> headers = new HashMap<>();
         headers.put("x-sharer-user-id", "1");
         Map<String, String> headersItem = new HashMap<>();
@@ -63,7 +63,7 @@ class ItemControllerTest {
         controller.add(headers, id, item).getBody();
         ItemDto item2 = controller.updateItem(itemId, id, fieldsItem, headersItem).getBody();
         assertEquals(item2.getName(), "Отвертка плоская");
-        userController.delete(1l);
+        userController.delete(1L);
     }
 
 
