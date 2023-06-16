@@ -46,7 +46,7 @@ class ItemControllerTest {
         Map<String, Object> fields = new HashMap<>();
         fields.put("name", "Марк Юрьевич");
         Map<String, Object> fieldsItem = new HashMap<>();
-        fieldsItem.put("name", "Отвертка крестовая");
+        fieldsItem.put("name", "Отвертка плоская");
         long id = 1l;
         long itemId = 1l;
         Map<String, String> headers = new HashMap<>();
@@ -62,7 +62,7 @@ class ItemControllerTest {
                 .name("Ответка").owner(itemId).build();
         controller.add(headers, id, item).getBody();
         ItemDto item2 = controller.updateItem(itemId, id, fieldsItem, headersItem).getBody();
-        assertEquals(item2.getName(), "Отвертка крестовая");
+        assertEquals(item2.getName(), "Отвертка плоская");
         userController.delete(1l);
     }
 
