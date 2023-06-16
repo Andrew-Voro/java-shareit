@@ -59,7 +59,7 @@ class ItemControllerTest {
             userController.create(user).getBody();
         }
         ItemDto item = ItemDto.builder().available(true).description("Отвертка аккумуляторная")
-                .name("Ответка плоская").owner(itemId).build();
+                .name("Ответка").owner(itemId).build();
         controller.add(headers, id, item).getBody();
         ItemDto item2 = controller.updateItem(itemId, id, fieldsItem, headersItem).getBody();
         assertEquals(item2.getName(), "Отвертка крестовая");
