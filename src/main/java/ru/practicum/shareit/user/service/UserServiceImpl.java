@@ -11,23 +11,52 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userStorage;
+    //private final UserRepository userStorage;
+    private final UserRepository repository;
 
     public ResponseEntity<UserDto> updateUser(Map<String, Object> fields, Long id) {
-        User user = userStorage.findUserById(id);
-
-        fields.forEach((k, v) -> {
-            Field field = ReflectionUtils.findField(User.class, k);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field, user, v);
-        });
+        User user = repository.findById(id).orElse(null);
+        if (!user.equals(null)) {
+            fields.forEach((k, v) -> {
+                Field field = ReflectionUtils.findField(User.class, k);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, user, v);
+            });
+            repository.save(user);
+        }
 
         return new ResponseEntity<>(UserMapper.toUserDto(user), HttpStatus.OK);
     }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = repository.findAll();
+        return UserMapper.mapToUserDto(users);
+    }
+
+    @Override
+    public UserDto saveUser(UserDto userDto) {
+        User user = repository.save(UserMapper.toDtoUser(userDto));
+        return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    public UserDto getUser(Long id) {
+        Optional<User> user = repository.findById(id);
+        return UserMapper.toUserDto(user.orElse(null));
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
+

@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
-public class InMemoryUserStorage implements UserRepository {
+public class InMemoryUserStorage /*implements UserRepository*/ {
     private static long idCounter;
     private final Map<Long, User> users = new HashMap<>();
 
-    @Override
+   // @Override
     public User findUserById(Long id) {
         if (!users.containsKey(id)) {
             throw new ObjectNotFoundException("getUser: Юзера c id = " + id + " нет.");
@@ -25,7 +25,7 @@ public class InMemoryUserStorage implements UserRepository {
         return users.get(id);
     }
 
-    @Override
+   // @Override
     public User create(User user) {
 
         if (!users.values().stream().map(User::hashCode).collect(Collectors.toList()).contains(user.hashCode())) {
@@ -43,12 +43,12 @@ public class InMemoryUserStorage implements UserRepository {
     }
 
 
-    @Override
+    //@Override
     public Collection<User> findAll() {
         return users.values();
     }
 
-    @Override
+    //@Override
     public void delete(Long id) {
         if (users.containsKey(id)) {
             users.remove(id);
@@ -58,7 +58,7 @@ public class InMemoryUserStorage implements UserRepository {
         }
     }
 
-    @Override
+    //@Override
     public Map<Long, User> getUsers() {
         return users;
     }
