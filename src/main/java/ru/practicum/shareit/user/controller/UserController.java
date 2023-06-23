@@ -57,11 +57,8 @@ public class UserController {
             log.info("Введите положительный id.");
             throw new ValidationException("getUser: Введите положительный id.");
         }
-        if (!userService.getAllUsers().stream().map(UserDto::getId).collect(Collectors.toList()).contains(id)) {
-            log.info("Пользователь с  id: " + id + " не найден.");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        log.info("Пользователь с  id: " + id + " найден.");
+
+        log.info("Пользователь с  id: " + id + " запрошен.");
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
@@ -81,32 +78,14 @@ public class UserController {
         return userService.updateUser(fields, id);
     }
 
-
-
-
-
-
-
-
-
-
-
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         if (id < 0) {
             log.info("Введите положительный id.");
             throw new ValidationException("delete: Введите положительный id.");
         }
-        if (!userService.getAllUsers().stream().map(UserDto::getId).collect(Collectors.toList()).contains(id)) {
-            log.info("Пользователь с  id: " + id + " отсутствует в базе.");
-            throw new ValidationException("Delete: ValidationException пользователь c  id = " + id +
-                    " отсутствует в базе. ");
-        }
+        userService.getUser(id);
         log.info("Пользователь с  id: " + id + " удален.");
         userService.delete(id);
     }
-
-
-
 }

@@ -14,11 +14,11 @@ import javax.validation.constraints.Email;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
-    @EqualsAndHashCode.Exclude
+   // @EqualsAndHashCode.Exclude
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @EqualsAndHashCode.Exclude
+    //@EqualsAndHashCode.Exclude
     String name;
     @Email
     @NonNull

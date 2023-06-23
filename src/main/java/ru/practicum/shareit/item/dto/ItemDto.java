@@ -2,8 +2,11 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.booking.dto.BookingDtoForItem;
+import ru.practicum.shareit.comment.dto.CommentDto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
@@ -22,4 +25,7 @@ public class ItemDto implements Serializable {
     Boolean available;
     Long owner;
     Long request;
+    BookingDtoForItem lastBooking;
+    BookingDtoForItem nextBooking;
+    List<CommentDto> comments;
 }
