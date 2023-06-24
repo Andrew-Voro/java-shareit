@@ -22,15 +22,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String text;
-    //@Column(name = "item_id")
     @ManyToOne
-    //@CollectionTable(name = "items", joinColumns = @JoinColumn(name = "id"))
-            // Long item ;
     Item item;
-    //@Column(name = "author_id")
-    @ManyToOne
-    // @CollectionTable(name = "users", joinColumns = @JoinColumn(name = "id"))
-    //Long author;
+    @OneToOne
     @JoinColumn(name = "author_id")
     User author;
     LocalDateTime created;

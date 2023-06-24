@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    @Override//
+    @Override
     public List<ItemDto> getItems(Long owner) {
         List<ItemDto> userItemsDto = ItemMapper.toItemDto(repository.findByOwnerOrderById(owner));
         for (ItemDto itemDto : userItemsDto) {
@@ -70,20 +69,12 @@ public class ItemServiceImpl implements ItemService {
             if (itemDto.getOwner().equals(userId)) {
 
                 SetLastNextBooking(itemDto, itemId);
-                /*Booking last = bookingRepository.findByItem_Id(itemId).stream().filter(x->x.getStatus().equals(Status.APPROVED)).filter(x -> x.getStart().isBefore(LocalDateTime.now())).reduce((a, b) ->
-                        a.getStart().isAfter(b.getStart()) ? a : b).get();
-                Booking next = bookingRepository.findByItem_Id(itemId).stream().filter(x->x.getStatus().equals(Status.APPROVED)).filter(x -> x.getStart().isAfter(LocalDateTime.now())).reduce((a, b) ->
-                        a.getStart().isBefore(b.getStart()) ? a : b).get();
-                itemDto.setLastBooking(BookingMapper.toBookingDtoForItem(last));
-                itemDto.setNextBooking(BookingMapper.toBookingDtoForItem(next));*/
-
             }
         } catch (Exception e) {
             return itemDto;
         }
         return itemDto;
     }
-
 
     @Transactional
     @Override
@@ -115,7 +106,6 @@ public class ItemServiceImpl implements ItemService {
             itemDto.setLastBooking(BookingMapper.toBookingDtoForItem(last));
         } catch (Exception e) {
             itemDto.setLastBooking(null);
-            //return itemDto;
         }
         try {
             next = bookingRepository.findByItem_Id(itemId).stream().filter(x -> x.getStatus().equals(Status.APPROVED)).filter(x -> x.getStart().isAfter(LocalDateTime.now())).reduce((a, b) ->
@@ -136,19 +126,19 @@ public class ItemServiceImpl implements ItemService {
         try {
             last = bookingRepository.findByItem_Id(itemId).stream().filter(x -> x.getStart().isBefore(LocalDateTime.now())).reduce((a, b) ->
                     a.getStart().isAfter(b.getStart()) ? a : b).get();
+            itemDto.setLastBooking(BookingMapper.toBookingDtoForItem(last));
         } catch (Exception e) {
             itemDto.setLastBooking(null);
-            return itemDto;
+
         }
         try {
             next = bookingRepository.findByItem_Id(itemId).stream().filter(x -> x.getStart().isAfter(LocalDateTime.now())).reduce((a, b) ->
                     a.getStart().isBefore(b.getStart()) ? a : b).get();
+            itemDto.setNextBooking(BookingMapper.toBookingDtoForItem(next));
         } catch (Exception e) {
             itemDto.setNextBooking(null);
             return itemDto;
         }
-        itemDto.setLastBooking(BookingMapper.toBookingDtoForItem(last));
-        itemDto.setNextBooking(BookingMapper.toBookingDtoForItem(next));
         return itemDto;
     }
 
@@ -175,6 +165,4 @@ public class ItemServiceImpl implements ItemService {
         Comment comment = commentRepository.save(CommentMapper.toDtoComment(commentDto, user, item));
         return CommentMapper.toCommentDto(comment);
     }
-
-
 }

@@ -7,14 +7,4 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    /*User create(User user);
-
-    Collection<User> findAll();
-
-    User findUserById(Long id); //new
-
-    void delete(Long id);
-
-    Map<Long, User> getUsers();*/
-
 }

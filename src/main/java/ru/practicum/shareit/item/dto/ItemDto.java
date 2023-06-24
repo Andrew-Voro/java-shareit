@@ -8,9 +8,6 @@ import ru.practicum.shareit.comment.dto.CommentDto;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)

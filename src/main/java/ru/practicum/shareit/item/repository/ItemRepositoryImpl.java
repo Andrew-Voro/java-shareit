@@ -14,15 +14,15 @@ import java.util.stream.Collectors;
 @Repository
 @Data
 @Getter
-public class ItemRepositoryImpl /*implements ItemRepository*/ {
+public class ItemRepositoryImpl {
     private final Map<Long, List<Item>> items = new HashMap<>();
 
-    //@Override
+
     public List<Item> findByUserId(long userId) {
         return items.getOrDefault(userId, Collections.emptyList());
     }
 
-    //@Override
+
     public Item getItem(Long itemId) {
         if (items.values().stream().flatMap(Collection::stream).map(Item::getId).collect(Collectors.toList()).contains(itemId)) {
             return items.values().stream().flatMap(Collection::stream).filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
@@ -31,7 +31,7 @@ public class ItemRepositoryImpl /*implements ItemRepository*/ {
         }
     }
 
-    //@Override
+
     public Item save(Item item) {
         item.setId(getId());
         items.compute(item.getOwner().getId(), (userId, userItems) -> {

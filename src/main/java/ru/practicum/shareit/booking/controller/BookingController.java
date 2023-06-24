@@ -12,22 +12,19 @@ import ru.practicum.shareit.booking.dto.BookingDtoBack;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
 
-import ru.practicum.shareit.handler.exception.ObjectNotFoundException;
+
 import ru.practicum.shareit.handler.exception.ValidationException;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.service.UserService;
+
 
 import javax.validation.Valid;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 
-/**
- * TODO Sprint add-bookings.
- */
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -73,17 +70,13 @@ public class BookingController {
                                                      @RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable("bookingId") Long bookingId,
                                                      @Valid @RequestParam(name = "approved") Optional<Boolean> approved) {
 
-        /*if (approved.equals(false)) {
-            log.info("Не разрешен просмотр для booking");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }*/
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (bookingId < 0) {
             log.info("Значение itemId не может быть меньше нуля");
-            throw new ValidationException("getItem: Введите положительный itemId.");
+            throw new ValidationException("getItem: Введите положительный bookingIdId.");
         }
 
         log.info("Предмет с itemId:" + bookingId + " запрошен.");
@@ -105,13 +98,12 @@ public class BookingController {
 
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwner(userId), HttpStatus.OK);
-        }else if (state.get().equals(State.PAST.toString())) {
+        } else if (state.get().equals(State.PAST.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwnerPast(userId, now()), HttpStatus.OK);
 
         } else if (state.get().equals(State.CURRENT.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwnerCurrent(userId, now()), HttpStatus.OK);
-        }
-        else if (state.get().equals(State.FUTURE.toString())) {
+        } else if (state.get().equals(State.FUTURE.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwnerFuture(userId, now()), HttpStatus.OK);
 
         } else if (state.get().equals(Status.WAITING.toString()) || state.get().equals(Status.REJECTED.toString())) {
@@ -122,14 +114,12 @@ public class BookingController {
             throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
 
-
     }
 
     @GetMapping
     public ResponseEntity<List<BookingDtoBack>> getBookingBooker(@RequestHeader Map<String, String> headers,
                                                                  @RequestHeader("X-Sharer-User-Id") Long userId,
                                                                  @Valid @RequestParam(name = "state") Optional<String> state) {
-
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -153,7 +143,6 @@ public class BookingController {
             return new ResponseEntity<>(bookingService.getBookingBookerStatus(userId, Status.valueOf(state.get())), HttpStatus.OK);
 
         } else {
-
             throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
 

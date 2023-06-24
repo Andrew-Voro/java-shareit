@@ -13,16 +13,12 @@ import ru.practicum.shareit.handler.exception.ObjectNotFoundException;
 import ru.practicum.shareit.handler.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static ru.practicum.shareit.booking.mapper.BookingMapper.toDtoBooking;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +40,6 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("Вещь не доступна");
         }
 
-        //return BookingMapper.toBookingDto(bookingRepository.save(BookingMapper.toDtoBooking(bookingDto,user,item)));
         Booking booking = bookingRepository.save(BookingMapper.toDtoBooking(bookingDto, user, item));
         return booking;
     }
@@ -109,6 +104,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findByOwnerAndEndIsBefore(owner, now).stream()
                 .map(BookingMapper::toBookingDtoBack).collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public List<BookingDtoBack> getBookingOwnerCurrent(Long owner, LocalDateTime now) {

@@ -12,9 +12,7 @@ import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
+
 @Entity
 @Table(name = "bookings", schema = "public")
 @AllArgsConstructor
@@ -23,25 +21,18 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Booking {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "start_date")
     LocalDateTime start;
     @Column(name = "end_date")
     LocalDateTime end;
-    //@Column(name = "item_id")
     @ManyToOne
-    //@CollectionTable(name = "items", joinColumns = @JoinColumn(name = "id"))
-    //Long item;
     Item item;
-    //@Column(name = "booker_id")
     @ManyToOne
-    //@CollectionTable(name = "users", joinColumns = @JoinColumn(name = "id"))
-    //Long booker;
-    @JoinColumn(name ="booker_id")
+    @JoinColumn(name = "booker_id")
     User booker;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     Status status;
-
 }

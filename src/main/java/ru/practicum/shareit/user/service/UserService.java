@@ -8,8 +8,12 @@ import java.util.Map;
 
 public interface UserService {
     ResponseEntity<UserDto> updateUser(Map<String, Object> fields, Long id);
+
     List<UserDto> getAllUsers();
+
     UserDto saveUser(UserDto userDto);
+
     UserDto getUser(Long id);
+
     void delete(Long id);
 }

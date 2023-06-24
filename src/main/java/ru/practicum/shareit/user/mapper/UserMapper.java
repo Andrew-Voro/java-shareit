@@ -13,7 +13,6 @@ public class UserMapper {
                 user.getId(),
                 user.getName(),
                 user.getEmail()
-
         );
     }
 
@@ -22,7 +21,6 @@ public class UserMapper {
                 userDto.getId(),
                 userDto.getName(),
                 userDto.getEmail()
-
         );
     }
 
@@ -32,7 +30,6 @@ public class UserMapper {
         for (User user : users) {
             result.add(toUserDto(user));
         }
-
         return result;
     }
 }

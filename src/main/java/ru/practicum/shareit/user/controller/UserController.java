@@ -7,20 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.handler.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @RestController
 @RequestMapping(path = "/users")
 @Slf4j
@@ -37,10 +30,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> saveNewUser(@RequestBody UserDto user) {
-        /*if (userService.getAllUsers().stream().map(UserDto::getEmail).collect(Collectors.toList()).contains(user.getEmail())) {
-            log.info("Пользователь с почтой: " + user.getEmail() + " уже существует.");
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }*/
 
         if (user.getEmail().isBlank() || !(user.getEmail().contains("@"))) {
             log.info("Некорректный почтовый адрес");
@@ -57,7 +46,6 @@ public class UserController {
             log.info("Введите положительный id.");
             throw new ValidationException("getUser: Введите положительный id.");
         }
-
         log.info("Пользователь с  id: " + id + " запрошен.");
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }

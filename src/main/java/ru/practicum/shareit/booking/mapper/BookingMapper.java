@@ -33,6 +33,7 @@ public class BookingMapper {
                 booking.getStatus()
         );
     }
+
     public static BookingDtoForItem toBookingDtoForItem(Booking booking) {
         return new BookingDtoForItem(
                 booking.getId(),
@@ -44,7 +45,7 @@ public class BookingMapper {
     }
 
 
-    public static Booking toDtoBooking(BookingDto bookingDto, User user, Item item) {  //Long userId,
+    public static Booking toDtoBooking(BookingDto bookingDto, User user, Item item) {
         Booking booking = new Booking();
         booking.setId(bookingDto.getId());
         booking.setStart(bookingDto.getStart());

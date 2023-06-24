@@ -12,10 +12,11 @@ public interface ItemService {
 
     ItemDto addNewItem(Long userId, ItemDto item);
 
-    ItemDto getItem(Long itemId,Long userId);
+    ItemDto getItem(Long itemId, Long userId);
 
     ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId);
 
     List<ItemDto> searchByNameOrDescription(String text);
-    CommentDto addComment(Long itemId,Long userId,CommentDto commentDto);
+
+    CommentDto addComment(Long itemId, Long userId, CommentDto commentDto);
 }

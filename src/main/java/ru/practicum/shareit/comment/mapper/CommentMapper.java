@@ -6,7 +6,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 public class CommentMapper {
-    public static Comment toDtoComment(CommentDto commentDto, User user, Item item) {  //Long userId,
+    public static Comment toDtoComment(CommentDto commentDto, User user, Item item) {
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
         comment.setAuthor(user);

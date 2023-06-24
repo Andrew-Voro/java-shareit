@@ -15,14 +15,14 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    //private final UserRepository userStorage;
+
     private final UserRepository repository;
+
     @Transactional
     public ResponseEntity<UserDto> updateUser(Map<String, Object> fields, Long id) {
         User user = repository.findById(id).orElse(null);
@@ -37,24 +37,28 @@ public class UserServiceImpl implements UserService {
 
         return new ResponseEntity<>(UserMapper.toUserDto(user), HttpStatus.OK);
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = repository.findAll();
         return UserMapper.mapToUserDto(users);
     }
+
     @Transactional
     @Override
     public UserDto saveUser(UserDto userDto) {
         User user = repository.save(UserMapper.toDtoUser(userDto));
         return UserMapper.toUserDto(user);
     }
+
     @Transactional(readOnly = true)
     @Override
     public UserDto getUser(Long id) {
         User user = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         return UserMapper.toUserDto(user);
     }
+
     @Transactional
     @Override
     public void delete(Long id) {

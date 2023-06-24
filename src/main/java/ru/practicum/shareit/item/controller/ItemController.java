@@ -8,31 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.handler.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Slf4j
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
-    //private final UserRepository userStorage;
     private final UserService userService;
-    // private final ItemRepository itemStorage;
 
     @PostMapping
     public ResponseEntity<ItemDto> add(@RequestHeader Map<String, String> headers,
@@ -42,10 +31,7 @@ public class ItemController {
             log.info("Метод add нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        /*if (!userService.getAllUsers().stream().map(UserDto::getId).collect(Collectors.toList()).contains(userId)) {
-            log.info("Метод add нет пользователя с id " + userId + " .");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }*/
+
         if (item.getName().isBlank()) {
             log.info("Поле name пусто.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -54,7 +40,6 @@ public class ItemController {
         log.info("Предмет добавление.");
         return new ResponseEntity<>(itemService.addNewItem(userId, item), HttpStatus.OK);
     }
-
 
     @GetMapping
     public List<ItemDto> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
@@ -65,7 +50,6 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemDto> getItem(@RequestHeader Map<String, String> headers,
                                            @RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable("itemId") Long itemId) {
-
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -74,11 +58,9 @@ public class ItemController {
             log.info("Значение itemId не может быть меньше нуля");
             throw new ValidationException("getItem: Введите положительный itemId.");
         }
-
         log.info("Предмет с itemId:" + itemId + " запрошен.");
-        return new ResponseEntity<>(itemService.getItem(itemId,userId), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getItem(itemId, userId), HttpStatus.OK);
     }
-
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> updateItem(@PathVariable("itemId") Long itemId,
@@ -86,28 +68,19 @@ public class ItemController {
                                               @RequestBody Map<String, Object> fields,
                                               @RequestHeader Map<String, String> headers
     ) {
-
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Метод updateItem нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        /*if (!userService.getAllUsers().stream().map(UserDto::getId).collect(Collectors.toList()).contains(userId)) {
-            log.info("Метод updateItem нет пользователя с id " + userId + " .");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }*/
+
         userService.getUser(userId).getId();
-        if (!itemService.getItem(itemId,userId).getOwner().equals(userId)) {
+        if (!itemService.getItem(itemId, userId).getOwner().equals(userId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-       /* if (!itemService.getItems(userId).stream().map(ItemDto::getId).collect(Collectors.toList()).contains(itemId)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }*/
 
         log.info("Предмет с id: " + itemId + " обновление.");
         return new ResponseEntity<>(itemService.updateItem(fields, userId, itemId), HttpStatus.OK);
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDto>> searchByNameOrDescription(@Valid @RequestParam(name = "text") String text) {
@@ -116,11 +89,8 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@PathVariable("itemId")Long itemId, @RequestHeader("X-Sharer-User-Id")Long userId,
-                                 @Valid @RequestBody CommentDto commentDto){
-
-        return itemService.addComment(itemId,userId,commentDto);
+    public CommentDto addComment(@PathVariable("itemId") Long itemId, @RequestHeader("X-Sharer-User-Id") Long userId,
+                                 @Valid @RequestBody CommentDto commentDto) {
+        return itemService.addComment(itemId, userId, commentDto);
     }
-
-
 }
