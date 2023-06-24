@@ -41,7 +41,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getItems(Long owner) {
         List<ItemDto> userItemsDto = ItemMapper.toItemDto(repository.findByOwnerOrderById(owner));
         for (ItemDto itemDto : userItemsDto) {
-            SetLastNextBookingWithoutStatus(itemDto, itemDto.getId());
+            setLastNextBookingWithoutStatus(itemDto, itemDto.getId());
         }
         return userItemsDto;
     }
@@ -68,7 +68,7 @@ public class ItemServiceImpl implements ItemService {
 
             if (itemDto.getOwner().equals(userId)) {
 
-                SetLastNextBooking(itemDto, itemId);
+                setLastNextBooking(itemDto, itemId);
             }
         } catch (Exception e) {
             return itemDto;
@@ -97,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(item);
     }
 
-    private ItemDto SetLastNextBooking(ItemDto itemDto, Long itemId) {
+    private ItemDto setLastNextBooking(ItemDto itemDto, Long itemId) {
         Booking last;
         Booking next;
         try {
@@ -120,7 +120,7 @@ public class ItemServiceImpl implements ItemService {
         return itemDto;
     }
 
-    private ItemDto SetLastNextBookingWithoutStatus(ItemDto itemDto, Long itemId) {
+    private ItemDto setLastNextBookingWithoutStatus(ItemDto itemDto, Long itemId) {
         Booking last;
         Booking next;
         try {
