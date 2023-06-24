@@ -7,7 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "users", schema = "public",uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
