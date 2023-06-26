@@ -22,7 +22,7 @@ public class ItemRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String description;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "requestor_id")
     User requestor;
     LocalDateTime created;

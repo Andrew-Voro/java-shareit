@@ -75,8 +75,8 @@ public class BookingController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (bookingId < 0) {
-            log.info("Значение itemId не может быть меньше нуля");
-            throw new ValidationException("getItem: Введите положительный bookingIdId.");
+            log.info("Значение bookingId не может быть меньше нуля");
+            throw new ValidationException("getItem: Введите положительный bookingId.");
         }
 
         log.info("Предмет с itemId:" + bookingId + " запрошен.");
