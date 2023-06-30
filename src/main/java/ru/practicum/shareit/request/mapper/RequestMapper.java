@@ -13,7 +13,8 @@ public class RequestMapper {
                 request.getId(),
                 request.getDescription(),
                 request.getRequestor().getId(),
-                request.getCreated()
+                request.getCreated(),
+                request.getItems()
         );
     }
 
@@ -22,7 +23,8 @@ public class RequestMapper {
                 requestDto.getId(),
                 requestDto.getDescription(),
                 requestor,
-                requestDto.getCreated()
+                requestDto.getCreated(),
+               requestDto.getItems()
         );
     }
 }

@@ -26,6 +26,6 @@ public class Item {
     @JoinColumn(name = "owner")
     @ToString.Exclude
     User owner;
-    @Column
-    Long request;
+    @Column(name = "request")
+    Long requestId;
 }

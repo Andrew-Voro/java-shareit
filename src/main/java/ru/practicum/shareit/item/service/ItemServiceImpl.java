@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -50,12 +51,14 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addNewItem(Long userId, ItemDto itemDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+
         Item item = repository.save(ItemMapper.toDtoItem(itemDto, user));
         return ItemMapper.toItemDto(item);
+
     }
 
     @Transactional(readOnly = true)
-    @Override//
+    @Override
     public ItemDto getItem(Long itemId, Long userId) {
         ItemDto itemDto = ItemMapper.toItemDto(repository.findById(itemId)
                 .orElseThrow(() -> new ObjectNotFoundException("Item not found")));

@@ -21,7 +21,7 @@ public class ItemDto implements Serializable {
     @NonNull
     Boolean available;
     Long owner;
-    Long request;
+    Long requestId;
     BookingDtoForItem lastBooking;
     BookingDtoForItem nextBooking;
     List<CommentDto> comments;

@@ -35,4 +35,8 @@ public interface BookingService {
     List<BookingDtoBack> getBookingBookerPast(Long userId, LocalDateTime now);
 
     List<BookingDtoBack> getBookingBookerCurrent(Long userId, LocalDateTime now);
+
+    List<BookingDtoBack> getAllOwnBookingPaged(Long userId,Long from,Long size);
+
+    List<BookingDtoBack> getAllBookingPaged(Long userId,Long from,Long size);
 }

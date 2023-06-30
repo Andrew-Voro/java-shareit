@@ -11,13 +11,9 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoBack;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
-
-
 import ru.practicum.shareit.handler.exception.ValidationException;
 
-
 import javax.validation.Valid;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -86,7 +82,10 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<List<BookingDtoBack>> getBookingOwner(@RequestHeader Map<String, String> headers,
                                                                 @RequestHeader("X-Sharer-User-Id") Long userId,
-                                                                @Valid @RequestParam(name = "state") Optional<String> state) {
+                                                                @Valid @RequestParam(name = "state") Optional<String> state,
+                                                                @Valid @RequestParam(name = "from") Optional<Long> from,
+                                                                @Valid @RequestParam(name = "size") Optional<Long> size
+    ) {
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -95,6 +94,22 @@ public class BookingController {
             log.info("Значение itemId не может быть меньше нуля");
             throw new ValidationException("getItem: Введите положительный itemId.");
         }
+
+        if (from.isPresent() && size.isPresent()) {
+            if (from.get() < 0 || size.get() < 0) {
+                log.info("own:Значение from или size не может быть меньше нуля");
+                throw new ValidationException("from или size не может быть меньше нуля: Введите положительные значения.");
+            }
+            if (from.get() == 0 && size.get() == 0) {
+                log.info("Значение from и size не могут быть равны нулю");
+                throw new ValidationException("from и size не могут быть равны нулю : Введите положительные значения.");
+            }
+
+            if (from.get() > 0 && size.get() > 0) {
+                return new ResponseEntity<>(bookingService.getAllOwnBookingPaged(userId, from.get(), size.get()), HttpStatus.OK);
+            }
+        }
+
 
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwner(userId), HttpStatus.OK);
@@ -119,7 +134,9 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingDtoBack>> getBookingBooker(@RequestHeader Map<String, String> headers,
                                                                  @RequestHeader("X-Sharer-User-Id") Long userId,
-                                                                 @Valid @RequestParam(name = "state") Optional<String> state) {
+                                                                 @Valid @RequestParam(name = "state") Optional<String> state,
+                                                                 @Valid @RequestParam(name = "from") Optional<Long> from,
+                                                                 @Valid @RequestParam(name = "size") Optional<Long> size) {
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -128,6 +145,21 @@ public class BookingController {
             log.info("Значение itemId не может быть меньше нуля");
             throw new ValidationException("getItem: Введите положительный itemId.");
         }
+
+        if (from.isPresent() && size.isPresent()) {
+            if (from.get() < 0 || size.get() < 0) {
+                log.info("booker:Значение from или size не может быть меньше нуля");
+                throw new ValidationException("from или size не может быть меньше нуля: Введите положительные значения.");
+            }
+            if (from.get() == 0 && size.get() == 0) {
+                log.info("Значение from и size не могут быть равны нулю");
+                throw new ValidationException("from и size не могут быть равны нулю : Введите положительные значения.");
+            }
+            if (from.get() > 0 && size.get() > 0) {
+                return new ResponseEntity<>(bookingService.getAllBookingPaged(userId, from.get(), size.get()), HttpStatus.OK);
+            }
+        }
+
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingBooker(userId), HttpStatus.OK);
         } else if (state.get().equals(State.PAST.toString())) {
