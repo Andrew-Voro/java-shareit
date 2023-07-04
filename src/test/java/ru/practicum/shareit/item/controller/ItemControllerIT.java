@@ -119,7 +119,7 @@ class ItemControllerIT {
         Map<String, Object> fields = new HashMap<>();
         fields.put("id", "1");
         fields.put("name", "thing");
-        fields.put("description", "Аккумуляторная дрель");
+        fields.put("description", "new thing");
         fields.put("available", false);
         ItemDto itemDtoUpdate = ItemDto.builder().available(true).owner(userId).id(1L)
                 .description("new thing").name("thing").build();
