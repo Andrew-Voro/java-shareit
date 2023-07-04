@@ -24,7 +24,7 @@ public class RequestMapper {
                 requestDto.getDescription(),
                 requestor,
                 requestDto.getCreated(),
-               requestDto.getItems()
+                requestDto.getItems()
         );
     }
 }

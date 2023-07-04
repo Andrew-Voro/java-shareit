@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@SpringBootTest
+
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
@@ -36,37 +36,5 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUsers, response.getBody());
     }
-
-
-
-
-    // @Autowired
-    // private UserController userController;
-
-   /* @Test
-    public void contextLoads() throws Exception {
-        assertThat(userController).isNotNull();
-    }
-
-    @Test
-    public void createUserTest() {
-        UserDto user = UserDto.builder().email("user444@user.com").name("Марк").build();
-        UserDto user2 = userController.saveNewUser(user).getBody();
-        assertNotNull(user2.getId());
-        assertEquals(user2.getName(), user.getName());
-    }
-
-    @Test
-    public void updateUserTest() {
-        Map<String, Object> fields = new HashMap<>();
-        fields.put("name", "Марк Юрьевич");
-        long id = 1L;
-        UserDto user = UserDto.builder().email("user444@user.com").name("Марк").build();
-        userController.saveNewUser(user).getBody();
-        UserDto user3 = userController.updateUser(id, fields).getBody();
-        assertEquals(user3.getName(), "Марк Юрьевич");
-        userController.delete(1L);
-    }
-*/
 
 }

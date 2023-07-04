@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -21,14 +20,12 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest({ItemRequestController.class})
-
 class ItemRequestControllerIT {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -63,6 +60,7 @@ class ItemRequestControllerIT {
                 .getContentAsString();
         assertEquals(objectMapper.writeValueAsString(itemRequestDtoAdd), result);
     }
+
     @SneakyThrows
     @Test
     void get() {
@@ -78,8 +76,8 @@ class ItemRequestControllerIT {
                 .andDo(print())
                 .andExpect(status().isOk());
         verify(itemRequestService).getRequest(userId, requestId);
-
     }
+
     @SneakyThrows
     @Test
     void getOwn() {
@@ -95,6 +93,7 @@ class ItemRequestControllerIT {
                 .andExpect(status().isOk());
         verify(itemRequestService).getOwn(userId);
     }
+
     @SneakyThrows
     @Test
     void getAllVerifyPagedRightCondition() {
@@ -102,8 +101,8 @@ class ItemRequestControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/requests/all")
                 .param("x-sharer-user-id", "0")
-                .param("from","1")
-                .param("size","20")
+                .param("from", "1")
+                .param("size", "20")
                 .header("x-sharer-user-id", userId)
                 .contentType("application/json")
                 .characterEncoding(StandardCharsets.UTF_8)
@@ -112,8 +111,6 @@ class ItemRequestControllerIT {
                 .andExpect(status().isOk());
         verify(itemRequestService).getAllPaged(userId, 1L, 20L);
     }
-
-
 
     @SneakyThrows
     @Test

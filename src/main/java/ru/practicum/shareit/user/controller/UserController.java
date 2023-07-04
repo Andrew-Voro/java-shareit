@@ -57,7 +57,7 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id,@Valid @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserDto user) {
 
         if ((!(user.getEmail() == null)) && userService.getAllUsers().stream().map(UserDto::getEmail)
                 .collect(Collectors.toList()).contains(user.getEmail())) {

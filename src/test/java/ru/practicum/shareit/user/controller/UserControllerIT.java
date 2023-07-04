@@ -49,7 +49,7 @@ class UserControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDtoCreate.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDtoCreate.getName())))
-                .andExpect(jsonPath("$.email", is(userDtoCreate.getEmail())))                .andReturn()
+                .andExpect(jsonPath("$.email", is(userDtoCreate.getEmail()))).andReturn()
                 .getResponse()
                 .getContentAsString();
         assertEquals(objectMapper.writeValueAsString(userDtoCreate), result);
@@ -104,7 +104,6 @@ class UserControllerIT {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(userService).delete(userId);
-
     }
 
     @SneakyThrows

@@ -88,7 +88,7 @@ class ItemControllerIT {
                 .accept("application/json"))
                 .andDo(print())
                 .andExpect(status().isOk());
-        verify(itemService).getItems( userId);
+        verify(itemService).getItems(userId);
     }
 
     @SneakyThrows
