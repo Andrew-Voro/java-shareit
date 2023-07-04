@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 @NoArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class User {
 
     @Id

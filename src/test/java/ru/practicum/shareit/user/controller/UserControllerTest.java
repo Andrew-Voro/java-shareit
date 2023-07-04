@@ -6,13 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
-
 
 import java.util.List;
 
@@ -36,14 +33,11 @@ class UserControllerTest {
 
         ResponseEntity<List<UserDto>> response = userController.getAllUsers();
 
-        assertEquals(HttpStatus.OK,response.getStatusCode());
-        assertEquals(expectedUsers,response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedUsers, response.getBody());
     }
 
-    @Test
-    void getUser() {
 
-    }
 
 
     // @Autowired

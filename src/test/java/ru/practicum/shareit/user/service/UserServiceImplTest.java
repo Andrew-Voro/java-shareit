@@ -13,12 +13,14 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -29,8 +31,7 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Captor
-    private ArgumentCaptor<UserDto> userDtoArgumentCaptor;
-
+    private ArgumentCaptor<User> userDtoArgumentCaptor;
 
 
     @Test
@@ -71,6 +72,44 @@ class UserServiceImplTest {
 
     @Test
     void updateUser() {
+        Long userId = 1L;
+
+        User oldUser = new User();
+        oldUser.setName("al");
+        oldUser.setEmail("o@em.com");
+        oldUser.setId(userId);
+        oldUser.setId(userId);
+
+        User newUser = new User();
+        newUser.setName("all");
+        newUser.setEmail("ol@em.com");
+        newUser.setId(userId);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(oldUser));
+        when(userRepository.save(oldUser)).thenReturn(oldUser);
+        UserDto actualUser = userService.updateUser(UserMapper.toUserDto(newUser), userId).getBody();
+        verify(userRepository).save(userDtoArgumentCaptor.capture());
+        User saveUser = userDtoArgumentCaptor.getValue();
+        assertEquals("all", saveUser.getName());
+        assertEquals("ol@em.com", saveUser.getEmail());
+    }
+
+    @Test
+    void getAllUsers() {
+        User expectedUser = new User();
+        expectedUser.setEmail("e@mail.ru");
+
+        List<User> users = new ArrayList<>();
+        users.add(expectedUser);
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        List<UserDto> actualUsers = userService.getAllUsers();
+        assertEquals(UserMapper.toUserDto(expectedUser), actualUsers.get(0));
+    }
+
+    @Test
+    void delete() {
 
     }
 }
