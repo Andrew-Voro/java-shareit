@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.model;
+package ru.practicum.shareit.booking.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,30 +9,23 @@ import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
-@Entity
-@Table(name = "bookings", schema = "public")
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Booking {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BookingDtoBack {
+
     Long id;
-    @Column(name = "start_date")
+
     LocalDateTime start;
-    @Column(name = "end_date")
+
     LocalDateTime end;
-    @ManyToOne
+
     Item item;
-    @ManyToOne
-    @JoinColumn(name = "booker_id")
+
     User booker;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+
     Status status;
 }
