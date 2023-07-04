@@ -118,11 +118,11 @@ class ItemControllerIT {
         Long itemId = 0L;
         Map<String, Object> fields = new HashMap<>();
         fields.put("id", "1");
-        fields.put("name", "Дрель+");
+        fields.put("name", "thing");
         fields.put("description", "Аккумуляторная дрель");
         fields.put("available", false);
         ItemDto itemDtoUpdate = ItemDto.builder().available(true).owner(userId).id(1L)
-                .description("Аккумуляторная дрель").name("Дрель+").build();
+                .description("new thing").name("thing").build();
 
         Mockito.when(userService.getUser(userId)).thenReturn(userDto);
         Mockito.when(itemService.getItem(itemId, userId)).thenReturn(itemDtoUpdate);
