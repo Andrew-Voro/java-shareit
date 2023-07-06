@@ -77,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         PageRequest page = PageRequest.of(from.intValue() > 0 ? from.intValue() / size.intValue() : 0, size.intValue());
 
-        return bookingRepository.findByOwnerPaged(userId, page).map(BookingMapper::toBookingDtoBack).getContent();
+        return bookingRepository.findByOwnerPaged(userId, page).stream().map(BookingMapper::toBookingDtoBack).collect(Collectors.toList());
     }
 
 
@@ -85,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDtoBack> getAllBookingPaged(Long userId, Long from, Long size) {
         PageRequest page = PageRequest.of(from.intValue() > 0 ? from.intValue() / size.intValue() : 0, size.intValue());
-        return bookingRepository.findByBooker(userId, page).map(BookingMapper::toBookingDtoBack).getContent();
+        return bookingRepository.findByBookerPaged(userId, page).stream().map(BookingMapper::toBookingDtoBack).collect(Collectors.toList());
     }
 
 

@@ -23,6 +23,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,14 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId) {
 
         Item item = repository.findByOwnerOrderById(userId).stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
+        Item updateItem = makeItemFromMap(fields, item);
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));//
+        item.setOwner(user);
+        repository.save(updateItem);
+        return ItemMapper.toItemDto(updateItem);
+    }
+
+    Item makeItemFromMap(Map<String, Object> fields, Item item) {
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Item.class, k);
             field.setAccessible(true);
@@ -94,11 +103,9 @@ public class ItemServiceImpl implements ItemService {
                 ReflectionUtils.setField(field, item, v);
             }
         });
-        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));//
-        item.setOwner(user);
-        repository.save(item);
-        return ItemMapper.toItemDto(item);
+        return item;
     }
+
 
     private ItemDto setLastNextBooking(ItemDto itemDto, Long itemId) {
         Booking last;
@@ -158,13 +165,15 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
         Item item = repository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("Item not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+
         List<Booking> bookings = bookingRepository.findByItem_IdAndBooker_idAndStatus(itemId, userId, Status.APPROVED)
                 .orElseThrow(() -> new ValidationException("Booking not found"));
-        List<Booking> bookingsNotFuture = bookings.stream().filter(x -> x.getStart().isBefore(LocalDateTime.now())).collect(Collectors.toList());
+        List<Booking> bookingsNotFuture = bookings.stream().filter(x -> x.getStart().isBefore(created)).collect(Collectors.toList());
         if (bookingsNotFuture.isEmpty()) {
             throw new ValidationException("Not found current or past Booking ");
         }
-        commentDto.setCreated(LocalDateTime.now());
+        commentDto.setCreated(created);
         Comment comment = commentRepository.save(CommentMapper.toDtoComment(commentDto, user, item));
         return CommentMapper.toCommentDto(comment);
     }

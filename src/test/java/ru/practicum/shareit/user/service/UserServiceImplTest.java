@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
+
     @Mock
     UserRepository userRepository;
 
@@ -110,6 +112,9 @@ class UserServiceImplTest {
 
     @Test
     void delete() {
-
+        Long userId = 0L;
+        userService.delete(userId);
+        verify(userRepository).deleteById(userId);
     }
+
 }

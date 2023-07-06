@@ -55,9 +55,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> getAllPaged(Long userId, Long from, Long size) {
         PageRequest page = PageRequest.of(from.intValue() > 0 ? from.intValue() / size.intValue() : 0, size.intValue());
-        return itemRequestRepository.findAllPaged(userId, page)
-                .map(RequestMapper::toRequestDto)
-                .getContent();
+        return itemRequestRepository.findAllPaged(userId, page).stream()
+                .map(RequestMapper::toRequestDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

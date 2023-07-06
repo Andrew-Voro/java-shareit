@@ -1,10 +1,10 @@
 package ru.practicum.shareit.booking.repository;
 
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.model.Booking;
 
@@ -12,18 +12,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select i  from Booking as i left join i.item as u left join u.owner as o  where o.id = ?1 order by i.id desc ")
     List<Booking> findByOwner(Long owner);
 
     @Query("select i  from Booking as i left join i.item as u left join u.owner as o  where o.id = ?1 order by i.id desc ")
-    Page<Booking> findByOwnerPaged(Long userId, PageRequest page);
+    List<Booking> findByOwnerPaged(Long userId, PageRequest page);
 
     @Query("select i  from Booking as i left join i.booker as u  where u.id = ?1 order by i.id desc")
     List<Booking> findByBooker(Long booker);
 
     @Query("select i  from Booking as i left join i.booker as u  where u.id = ?1 order by i.id desc")
-    Page<Booking> findByBooker(Long userId, PageRequest page);
+    List<Booking> findByBookerPaged(Long userId, PageRequest page);
 
     List<Booking> findByBooker_IdAndStartIsAfterOrderByIdDesc(Long bookerId, LocalDateTime now);
 
