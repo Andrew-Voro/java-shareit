@@ -165,7 +165,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
         Item item = repository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("Item not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
-        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 
         List<Booking> bookings = bookingRepository.findByItem_IdAndBooker_idAndStatus(itemId, userId, Status.APPROVED)
                 .orElseThrow(() -> new ValidationException("Booking not found"));

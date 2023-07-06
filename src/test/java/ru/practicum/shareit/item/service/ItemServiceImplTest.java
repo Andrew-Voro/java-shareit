@@ -143,7 +143,7 @@ class ItemServiceImplTest {
         Long userId = 0L;
         Long bookingId = 0L;
         User user = User.builder().name("an").email("an@com").id(userId).build();
-        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 
         ItemDto itemDto = ItemDto.builder().name("thing").description("thing").owner(userId).comments(new ArrayList<>()).available(true).build();
         Item item = ItemMapper.toDtoItem(itemDto, user);
