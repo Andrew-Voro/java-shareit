@@ -14,6 +14,8 @@ import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.handler.exception.ValidationException;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -109,17 +111,17 @@ public class BookingController {
                 return new ResponseEntity<>(bookingService.getAllOwnBookingPaged(userId, from.get(), size.get()), HttpStatus.OK);
             }
         }
-
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwner(userId), HttpStatus.OK);
         } else if (state.get().equals(State.PAST.toString())) {
-            return new ResponseEntity<>(bookingService.getBookingOwnerPast(userId, now()), HttpStatus.OK);
+            return new ResponseEntity<>(bookingService.getBookingOwnerPast(userId, now), HttpStatus.OK);
 
         } else if (state.get().equals(State.CURRENT.toString())) {
-            return new ResponseEntity<>(bookingService.getBookingOwnerCurrent(userId, now()), HttpStatus.OK);
+            return new ResponseEntity<>(bookingService.getBookingOwnerCurrent(userId, now), HttpStatus.OK);
         } else if (state.get().equals(State.FUTURE.toString())) {
-            return new ResponseEntity<>(bookingService.getBookingOwnerFuture(userId, now()), HttpStatus.OK);
+            return new ResponseEntity<>(bookingService.getBookingOwnerFuture(userId, now), HttpStatus.OK);
 
         } else if (state.get().equals(Status.WAITING.toString()) || state.get().equals(Status.REJECTED.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwnerStatus(userId, Status.valueOf(state.get())), HttpStatus.OK);
@@ -159,17 +161,18 @@ public class BookingController {
                 return new ResponseEntity<>(bookingService.getAllBookingPaged(userId, from.get(), size.get()), HttpStatus.OK);
             }
         }
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingBooker(userId), HttpStatus.OK);
         } else if (state.get().equals(State.PAST.toString())) {
-            return new ResponseEntity<>(bookingService.getBookingBookerPast(userId, now()), HttpStatus.OK);
+            return new ResponseEntity<>(bookingService.getBookingBookerPast(userId, now), HttpStatus.OK);
 
         } else if (state.get().equals(State.CURRENT.toString())) {
-            return new ResponseEntity<>(bookingService.getBookingBookerCurrent(userId, now()), HttpStatus.OK);
+            return new ResponseEntity<>(bookingService.getBookingBookerCurrent(userId, now), HttpStatus.OK);
 
         } else if (state.get().equals(State.FUTURE.toString())) {
-            return new ResponseEntity<>(bookingService.getBookingBookerFuture(userId, now()), HttpStatus.OK);
+            return new ResponseEntity<>(bookingService.getBookingBookerFuture(userId, now), HttpStatus.OK);
 
         } else if (state.get().equals(Status.WAITING.toString()) || state.get().equals(Status.REJECTED.toString())) {
             return new ResponseEntity<>(bookingService.getBookingBookerStatus(userId, Status.valueOf(state.get())), HttpStatus.OK);
