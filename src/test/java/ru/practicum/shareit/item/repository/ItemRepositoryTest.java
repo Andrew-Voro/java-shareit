@@ -58,9 +58,9 @@ class ItemRepositoryTest {
 
     @Test
     void findByRequestId() {
-        List<Item> items = itemRepository.findByRequestId(1L);
+        List<Item> items = itemRepository.findByRequestId(3L);
         assertEquals(items.size(), 1);//0
-        assertEquals(items.get(0).getRequestId(), 1L);
+        assertEquals(items.get(0).getRequestId(), 3L);
     }
 
 

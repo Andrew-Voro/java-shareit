@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.repository;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,9 +7,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -28,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class BookingRepositoryTest {
     @Autowired
     private ItemRequestRepository itemRequestRepository;
@@ -39,8 +39,6 @@ class BookingRepositoryTest {
     @Autowired
     private BookingRepository bookingRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
 
     @BeforeEach
     private void addBookings() {
@@ -76,6 +74,7 @@ class BookingRepositoryTest {
     void findByOwner() {
 
         List<Booking> bookings = bookingRepository.findByOwner(1L);
+        List<Booking> bookingsAll = bookingRepository.findAll();
         assertEquals(bookings.size(), 3);//0
         assertEquals(bookings.get(0).getItem().getOwner().getId(), 1L);
 
@@ -100,7 +99,7 @@ class BookingRepositoryTest {
 
         assertEquals(bookings.size(), 3);//0
         assertEquals(bookingRepository.findAll().size(), 3);
-        assertEquals(bookings.get(0).getBooker().getId(), 1L);
+        assertEquals(bookings.get(0).getBooker().getId(), 2L);
     }
 
     @Test
@@ -191,12 +190,12 @@ class BookingRepositoryTest {
     }
 
 
-    @AfterEach
+   /* @AfterEach
     private void deleteBookings() {
         bookingRepository.deleteAll();
         itemRepository.deleteAll();
         itemRequestRepository.deleteAll();
         userRepository.deleteAll();
 
-    }
+    }*/
 }
