@@ -78,6 +78,7 @@ class ItemControllerTest {
         ItemDto itemDtoAdd = ItemDto.builder().available(true).description("thing").name("").build();
         Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
         mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .header("x-sharer-user-id", userDtoCreate.getId())
                 .content(objectMapper.writeValueAsString(itemDtoAdd))
                 .contentType("application/json")
                 .characterEncoding(StandardCharsets.UTF_8)
@@ -97,6 +98,7 @@ class ItemControllerTest {
         ItemDto itemDtoAdd = ItemDto.builder().description("thing").name("thing").build();
         Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
         mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .header("x-sharer-user-id", userDtoCreate.getId())
                 .content(objectMapper.writeValueAsString(itemDtoAdd))
                 .contentType("application/json")
                 .characterEncoding(StandardCharsets.UTF_8)
@@ -112,9 +114,10 @@ class ItemControllerTest {
         UserDto userDtoCreate = new UserDto();
         userDtoCreate.setEmail("a@n.com");
         userDtoCreate.setId(userId);
-        ItemDto itemDtoAdd = ItemDto.builder().available(true).name("").build();
+        ItemDto itemDtoAdd = ItemDto.builder().available(true).name("thing").build();
         Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
         mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .header("x-sharer-user-id", userDtoCreate.getId())
                 .content(objectMapper.writeValueAsString(itemDtoAdd))
                 .contentType("application/json")
                 .characterEncoding(StandardCharsets.UTF_8)
