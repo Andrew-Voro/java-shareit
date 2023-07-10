@@ -23,7 +23,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-        public ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId) {
+    public ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId) {
 
         Item item = repository.findByOwnerOrderById(userId).stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
         Item updateItem = makeItemFromMap(fields, item);
@@ -165,8 +164,8 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
         Item item = repository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException("Item not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
-        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-
+        //LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime created = LocalDateTime.now();
         List<Booking> bookings = bookingRepository.findByItem_IdAndBooker_idAndStatus(itemId, userId, Status.APPROVED)
                 .orElseThrow(() -> new ValidationException("Booking not found"));
         List<Booking> bookingsNotFuture = bookings.stream().filter(x -> x.getStart().isBefore(created)).collect(Collectors.toList());
