@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ItemRepositoryTest {
 
     @Autowired
@@ -32,6 +34,7 @@ class ItemRepositoryTest {
 
 
     @BeforeEach
+
     private void addItems() {
 
         User owner = userRepository.save(User.builder().email("a@n.com").name("an").build());
@@ -58,9 +61,9 @@ class ItemRepositoryTest {
 
     @Test
     void findByRequestId() {
-        List<Item> items = itemRepository.findByRequestId(3L);
+        List<Item> items = itemRepository.findByRequestId(1L);
         assertEquals(items.size(), 1);//0
-        assertEquals(items.get(0).getRequestId(), 3L);
+        assertEquals(items.get(0).getRequestId(), 1L);
     }
 
 
