@@ -178,7 +178,7 @@ class ItemServiceImplTest {
         Long userId = 0L;
         Long bookingId = 0L;
         User user = User.builder().name("an").email("an@com").id(userId).build();
-        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime created = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         ItemDto itemDto = ItemDto.builder().name("thing").description("thing").owner(userId).comments(new ArrayList<>()).available(true).build();
         Item item = ItemMapper.toDtoItem(itemDto, user);
@@ -199,7 +199,10 @@ class ItemServiceImplTest {
         when(bookingRepository.findByItem_IdAndBooker_idAndStatus(itemId, userId, Status.APPROVED)).thenReturn(Optional.of(bookings));
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
         CommentDto actualAddComment = itemService.addComment(itemId, userId, commentDto);
-        assertEquals(actualAddComment, commentDto);
+        assertEquals(actualAddComment.getId(), commentDto.getId());
+        assertEquals(actualAddComment.getText(), commentDto.getText());
+        assertEquals(actualAddComment.getAuthorName(), commentDto.getAuthorName());
+        assertEquals(actualAddComment.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")), commentDto.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         verify(commentRepository).save(comment);
 
     }
