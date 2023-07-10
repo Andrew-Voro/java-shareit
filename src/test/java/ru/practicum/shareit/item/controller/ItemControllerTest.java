@@ -59,7 +59,62 @@ class ItemControllerTest {
         ItemDto itemDtoAdd = ItemDto.builder().available(true).description("thing").name("mock").build();
         Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
         mockMvc.perform(MockMvcRequestBuilders.post("/items")
-                .param("x-sharer-user-id", "0")
+                .content(objectMapper.writeValueAsString(itemDtoAdd))
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept("application/json"))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).addNewItem(userId, itemDtoAdd);
+    }
+
+    @SneakyThrows
+    @Test
+    void addNameIsBlank() {
+        Long userId = 0L;
+        UserDto userDtoCreate = new UserDto();
+        userDtoCreate.setEmail("a@n.com");
+        userDtoCreate.setId(userId);
+        ItemDto itemDtoAdd = ItemDto.builder().available(true).description("thing").name("").build();
+        Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
+        mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .content(objectMapper.writeValueAsString(itemDtoAdd))
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept("application/json"))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).addNewItem(userId, itemDtoAdd);
+    }
+
+    @SneakyThrows
+    @Test
+    void addAvailableIsNull() {
+        Long userId = 0L;
+        UserDto userDtoCreate = new UserDto();
+        userDtoCreate.setEmail("a@n.com");
+        userDtoCreate.setId(userId);
+        ItemDto itemDtoAdd = ItemDto.builder().description("thing").name("thing").build();
+        Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
+        mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .content(objectMapper.writeValueAsString(itemDtoAdd))
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept("application/json"))
+                .andExpect(status().isBadRequest());
+        verify(itemService, never()).addNewItem(userId, itemDtoAdd);
+    }
+
+    @SneakyThrows
+    @Test
+    void addDescriptionIsNull() {
+        Long userId = 0L;
+        UserDto userDtoCreate = new UserDto();
+        userDtoCreate.setEmail("a@n.com");
+        userDtoCreate.setId(userId);
+        ItemDto itemDtoAdd = ItemDto.builder().available(true).name("").build();
+        Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
+        mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .content(objectMapper.writeValueAsString(itemDtoAdd))
                 .contentType("application/json")
                 .characterEncoding(StandardCharsets.UTF_8)
@@ -116,6 +171,38 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    void getItemWithoutHeaderException() {
+        Long itemId = 0L;
+        Long userId = 0L;
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/items/{itemId}", itemId)
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept("application/json"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+        verify(itemService, never()).getItem(itemId, userId);
+    }
+
+    @SneakyThrows
+    @Test
+    void getItemItemIdLessZero() {
+        Long itemId = -1L;
+        Long userId = 0L;
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/items/{itemId}", itemId)
+                .param("x-sharer-user-id", "0")
+                .header("x-sharer-user-id", userId)
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept("application/json"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+        verify(itemService, never()).getItem(itemId, userId);
+    }
+
+    @SneakyThrows
+    @Test
     void getItem() {
         Long itemId = 0L;
         Long userId = 0L;
@@ -130,6 +217,7 @@ class ItemControllerTest {
                 .andExpect(status().isOk());
         verify(itemService).getItem(itemId, userId);
     }
+
 
     @SneakyThrows
     @Test
@@ -156,6 +244,32 @@ class ItemControllerTest {
                 .andExpect(status().isOk());
         verify(itemService).updateItem(fields, userId, itemId);
     }
+
+    @SneakyThrows
+    @Test
+    void updateItemWithoutHeaderException() {
+        Long userId = 0L;
+        UserDto userDto = new UserDto();
+        userDto.setEmail("a@n.com");
+        userDto.setId(userId);
+        Long itemId = 0L;
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("id", "1");
+        fields.put("name", "thing");
+        fields.put("description", "new thing");
+        fields.put("available", false);
+        ItemDto itemDtoUpdate = ItemDto.builder().available(true).owner(userId).id(1L)
+                .description("new thing").name("thing").build();
+
+        Mockito.when(userService.getUser(userId)).thenReturn(userDto);
+        Mockito.when(itemService.getItem(itemId, userId)).thenReturn(itemDtoUpdate);
+        mockMvc.perform(patch("/items/{itemId}", itemId)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(fields)))
+                .andExpect(status().isBadRequest());
+        verify(itemService, never()).updateItem(fields, userId, itemId);
+    }
+
 
     @SneakyThrows
     @Test
