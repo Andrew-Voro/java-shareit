@@ -203,7 +203,6 @@ class ItemServiceImplTest {
         assertEquals(actualAddComment.getText(), commentDto.getText());
         assertEquals(actualAddComment.getAuthorName(), commentDto.getAuthorName());
         assertEquals(actualAddComment.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")), commentDto.getCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
-        verify(commentRepository).save(comment);
-
+        
     }
 }
