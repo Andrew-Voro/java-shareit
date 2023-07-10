@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,6 +47,28 @@ class ItemControllerTest {
     private ItemService itemService;
     @MockBean
     private UserService userService;
+
+
+    @SneakyThrows
+    @Test
+    void addWithoutHeaderException() {
+        Long userId = 0L;
+        UserDto userDtoCreate = new UserDto();
+        userDtoCreate.setEmail("a@n.com");
+        userDtoCreate.setId(userId);
+        ItemDto itemDtoAdd = ItemDto.builder().available(true).description("thing").name("mock").build();
+        Mockito.when(userService.getUser(anyLong())).thenReturn(userDtoCreate);
+        mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .param("x-sharer-user-id", "0")
+                .content(objectMapper.writeValueAsString(itemDtoAdd))
+                .contentType("application/json")
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept("application/json"))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).addNewItem(userId, itemDtoAdd);
+    }
+
 
     @SneakyThrows
     @Test

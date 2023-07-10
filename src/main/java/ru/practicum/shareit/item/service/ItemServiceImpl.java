@@ -82,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId) {
+        public ItemDto updateItem(Map<String, Object> fields, Long userId, Long itemId) {
 
         Item item = repository.findByOwnerOrderById(userId).stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
         Item updateItem = makeItemFromMap(fields, item);

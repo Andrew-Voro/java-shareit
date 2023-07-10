@@ -29,8 +29,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ItemServiceImplTest {
@@ -60,6 +59,18 @@ class ItemServiceImplTest {
         verify(repository).findByOwnerOrderById(userId);
     }
 
+
+    @Test
+    void addNewItemWithoutUser() {
+        Long userId = 0L;
+        User user = User.builder().name("an").email("an@com").id(userId).build();
+        ItemDto itemDto = ItemDto.builder().name("thing").description("thing").owner(userId).comments(new ArrayList<>()).available(true).build();
+        Item item = ItemMapper.toDtoItem(itemDto, user);
+        when(userRepository.findById(userId)).thenThrow(new ObjectNotFoundException("User not found"));
+        assertThrows(ObjectNotFoundException.class, () -> itemService.addNewItem(userId, itemDto));
+        verify(repository, never()).save(item);
+    }
+
     @Test
     void addNewItem() {
         Long userId = 0L;
@@ -73,6 +84,30 @@ class ItemServiceImplTest {
         assertEquals(itemDto, actualItemDto);
         verify(repository).save(item);
     }
+
+    @Test
+    void getItemNotFoundItemException() {
+        Long commentId = 0L;
+        Long itemId = 0L;
+        Long userId = 0L;
+
+        User user = User.builder().name("an").email("an@com").id(userId).build();
+
+        ItemDto itemDto = ItemDto.builder().name("thing").description("thing").owner(userId).comments(new ArrayList<>()).available(true).build();
+        Comment comment = Comment.builder().id(commentId).author(user).created(LocalDateTime.now()).text("new").build();
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
+
+        Item item = ItemMapper.toDtoItem(itemDto, user);
+        List<CommentDto> commentsDto = comments.stream().map(CommentMapper::toCommentDto).collect(Collectors.toList());
+
+        itemDto.setComments(commentsDto);
+
+        when(repository.findById(itemId)).thenThrow(new ObjectNotFoundException("Item not found"));
+        assertThrows(ObjectNotFoundException.class, () -> itemService.getItem(userId, userId));
+
+    }
+
 
     @Test
     void getItem() {
