@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 
 @WebMvcTest({BookingController.class})
-class BookingControllerIT {
+class BookingControllerTest {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private ObjectMapper objectMapper;
