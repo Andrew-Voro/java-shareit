@@ -19,23 +19,26 @@ public class ItemMapper {
                 item.getDescription(),
                 item.getAvailable(),
                 item.getOwner().getId(),
-                item.getRequest(),
+                item.getRequestId(),
                 null,
                 null,
                 new ArrayList<>()
         );
     }
 
-    public static Item toDtoItem(ItemDto itemDto, User user) { //long userId
+
+    public static Item toDtoItem(ItemDto itemDto, User user) {
         Item item = new Item();
         item.setId(itemDto.getId());
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
         item.setOwner(user);
-        item.setRequest(itemDto.getRequest());
+        item.setRequestId(itemDto.getRequestId());
+
         return item;
     }
+
 
     public static List<ItemDto> toItemDto(Iterable<Item> items) {
         List<ItemDto> dtos = new ArrayList<>();
@@ -44,4 +47,6 @@ public class ItemMapper {
         }
         return dtos;
     }
+
+
 }

@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 public class BookingDtoBack {
 
     Long id;
-
     LocalDateTime start;
-
     LocalDateTime end;
 
     Item item;

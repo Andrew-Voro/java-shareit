@@ -7,11 +7,12 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 
 @Entity
-@Table(name = "users", schema = "public",uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
+@Table(name = "users", schema = "public", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class User {
 
     @Id

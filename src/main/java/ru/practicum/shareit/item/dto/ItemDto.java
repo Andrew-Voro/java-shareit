@@ -10,18 +10,17 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class ItemDto implements Serializable {
     Long id;
     @NonNull
     String name;
-    @NonNull
     String description;
-    @NonNull
     Boolean available;
     Long owner;
-    Long request;
+    Long requestId;
     BookingDtoForItem lastBooking;
     BookingDtoForItem nextBooking;
     List<CommentDto> comments;

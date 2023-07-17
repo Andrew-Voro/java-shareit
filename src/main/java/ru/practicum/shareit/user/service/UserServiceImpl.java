@@ -5,16 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
 import ru.practicum.shareit.handler.exception.ObjectNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -23,20 +20,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
 
-    @Transactional
-    public ResponseEntity<UserDto> updateUser(Map<String, Object> fields, Long id) {
-        User user = repository.findById(id).orElse(null);
-        if (!user.equals(null)) {
-            fields.forEach((k, v) -> {
-                Field field = ReflectionUtils.findField(User.class, k);
-                field.setAccessible(true);
-                ReflectionUtils.setField(field, user, v);
-            });
-            repository.save(user);
-        }
 
-        return new ResponseEntity<>(UserMapper.toUserDto(user), HttpStatus.OK);
+    @Transactional
+    public ResponseEntity<UserDto> updateUser(UserDto userDto, Long id) {
+        User user = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+        if (userDto.getName() != null) {
+            user.setName(userDto.getName());
+        }
+        return new ResponseEntity<>(UserMapper.toUserDto(repository.save(user)), HttpStatus.OK);
     }
+
 
     @Transactional(readOnly = true)
     @Override

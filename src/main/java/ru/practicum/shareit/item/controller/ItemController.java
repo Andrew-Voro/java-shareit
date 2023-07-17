@@ -26,7 +26,7 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<ItemDto> add(@RequestHeader Map<String, String> headers,
                                        @RequestHeader("X-Sharer-User-Id") long userId,
-                                       @RequestBody ItemDto item) {
+                                       @Valid @RequestBody ItemDto item) {
         if (!headers.containsKey("x-sharer-user-id")) {
             log.info("Метод add нет заголовка: X-Sharer-User-Id.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -36,6 +36,15 @@ public class ItemController {
             log.info("Поле name пусто.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        if (item.getAvailable() == null) {
+            log.info("Поле available null.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (item.getDescription() == null) {
+            log.info("Поле description null.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         userService.getUser(userId);
         log.info("Предмет добавление.");
         return new ResponseEntity<>(itemService.addNewItem(userId, item), HttpStatus.OK);

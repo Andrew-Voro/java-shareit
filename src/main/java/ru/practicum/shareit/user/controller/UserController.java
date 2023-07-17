@@ -10,7 +10,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -23,18 +22,23 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         log.info("Вернули список пользователей.");
-        return userService.getAllUsers();
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserDto> saveNewUser(@RequestBody UserDto user) {
 
+        if (user.getEmail() == null) {
+            throw new ValidationException("Not found email in body of request ");
+        }
+
         if (user.getEmail().isBlank() || !(user.getEmail().contains("@"))) {
             log.info("Некорректный почтовый адрес");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         log.info("Пользователь с почтой: " + user.getEmail() + " создан.");
 
         return new ResponseEntity<>(userService.saveUser(user), HttpStatus.OK);
@@ -50,12 +54,13 @@ public class UserController {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id, @RequestBody Map<String, Object> fields) {
 
-        if (fields.containsKey("email") && userService.getAllUsers().stream().map(UserDto::getEmail)
-                .collect(Collectors.toList()).contains(fields.get("email"))) {
-            if (userService.getUser(id).getEmail().equals(fields.get("email"))) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id, @RequestBody UserDto user) {
+
+        if ((!(user.getEmail() == null)) && userService.getAllUsers().stream().map(UserDto::getEmail)
+                .collect(Collectors.toList()).contains(user.getEmail())) {
+            if (userService.getUser(id).getEmail().equals(user.getEmail())) {
                 log.info("Изменения уже были внесены.");
                 return getUser(id);
             }
@@ -63,8 +68,9 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         log.info("Данные пользователя с  id: " + id + " обновлены.");
-        return userService.updateUser(fields, id);
+        return userService.updateUser(user, id);
     }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {

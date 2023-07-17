@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDtoForItem implements Serializable {
     Long id;
-
     LocalDateTime start;
 
     LocalDateTime end;
