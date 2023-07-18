@@ -415,7 +415,7 @@ class BookingControllerTest {
     @Test
     void getBookingOwnerParamStateEqualsPast() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
                 .param("x-sharer-user-id", "0")
                 .param("state", "PAST")
@@ -432,7 +432,7 @@ class BookingControllerTest {
     @Test
     void getBookingOwnerParamStateEqualsCurrent() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
                 .param("x-sharer-user-id", "0")
                 .param("state", "CURRENT")
@@ -449,7 +449,7 @@ class BookingControllerTest {
     @Test
     void getBookingOwnerParamStateEqualsFuture() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
                 .param("x-sharer-user-id", "0")
                 .param("state", "FUTURE")
@@ -616,7 +616,7 @@ class BookingControllerTest {
     @Test
     void getBookingBookerParamStateEqualsPast() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
                 .param("x-sharer-user-id", "0")
                 .param("state", "PAST")
@@ -633,7 +633,7 @@ class BookingControllerTest {
     @Test
     void getBookingBookerParamStateEqualsCurrent() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
                 .param("x-sharer-user-id", "0")
                 .param("state", "CURRENT")
@@ -650,7 +650,7 @@ class BookingControllerTest {
     @Test
     void getBookingBookerParamStateEqualsFuture() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
                 .param("x-sharer-user-id", "0")
                 .param("state", "FUTURE")
