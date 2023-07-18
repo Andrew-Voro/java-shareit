@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -76,7 +75,6 @@ class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDtoCreate.getId()), Long.class))
                 //.andExpect(jsonPath("$.start", is(bookingDtoCreate.getStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")).toString())))
-                //.andExpect(jsonPath("$.end", is(bookingDtoCreate.getEnd().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")).toString())))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -415,7 +413,7 @@ class BookingControllerTest {
     @Test
     void getBookingOwnerParamStateEqualsPast() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
                 .param("x-sharer-user-id", "0")
                 .param("state", "PAST")
@@ -432,7 +430,7 @@ class BookingControllerTest {
     @Test
     void getBookingOwnerParamStateEqualsCurrent() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
                 .param("x-sharer-user-id", "0")
                 .param("state", "CURRENT")
@@ -449,7 +447,7 @@ class BookingControllerTest {
     @Test
     void getBookingOwnerParamStateEqualsFuture() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
                 .param("x-sharer-user-id", "0")
                 .param("state", "FUTURE")
@@ -616,7 +614,7 @@ class BookingControllerTest {
     @Test
     void getBookingBookerParamStateEqualsPast() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
                 .param("x-sharer-user-id", "0")
                 .param("state", "PAST")
@@ -633,7 +631,7 @@ class BookingControllerTest {
     @Test
     void getBookingBookerParamStateEqualsCurrent() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
                 .param("x-sharer-user-id", "0")
                 .param("state", "CURRENT")
@@ -650,7 +648,7 @@ class BookingControllerTest {
     @Test
     void getBookingBookerParamStateEqualsFuture() {
         Long userId = 0L;
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
                 .param("x-sharer-user-id", "0")
                 .param("state", "FUTURE")

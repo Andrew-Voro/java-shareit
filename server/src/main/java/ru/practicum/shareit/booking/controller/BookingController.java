@@ -111,7 +111,7 @@ public class BookingController {
                 return new ResponseEntity<>(bookingService.getAllOwnBookingPaged(userId, from.get(), size.get()), HttpStatus.OK);
             }
         }
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingOwner(userId), HttpStatus.OK);
@@ -161,7 +161,7 @@ public class BookingController {
                 return new ResponseEntity<>(bookingService.getAllBookingPaged(userId, from.get(), size.get()), HttpStatus.OK);
             }
         }
-        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+        LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         if (state.isEmpty() || state.get().equals(State.ALL.toString())) {
             return new ResponseEntity<>(bookingService.getBookingBooker(userId), HttpStatus.OK);
