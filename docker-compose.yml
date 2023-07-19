@@ -4,7 +4,9 @@ services:
     build: gateway
     image: shareit-gateway:latest
     container_name: shareit-gateway
-
+    deploy:
+      restart_policy:
+        condition: on-failure
     ports:
       - "8080:8080"
     depends_on:
